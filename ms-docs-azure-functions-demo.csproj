@@ -7,6 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>ms_docs_azure_functions_demo</RootNamespace>
+    <UserSecretsId>f4b29d74-7d84-4f36-aa5a-51ad10a40833</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
