@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "ms_docs_azure_functions_demo": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7137",
+      "launchBrowser": false
+    }
+  }
+}
