@@ -45,6 +45,36 @@ curl "http://localhost:7137/api/greet"
 # {"error":"Query parameter 'name' is required."}
 ```
 
+## CreateTodo
+
+`POST /api/todos` — creates a todo from a JSON body and returns the created item.
+
+| Field   | Required | Description |
+|---------|----------|-------------|
+| `title` | Yes      | Todo title (max 200 characters) |
+
+### Examples
+
+```bash
+# Create a todo (201 Created)
+curl -i -X POST "http://localhost:7137/api/todos" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Learn Azure Functions"}'
+# {"id":"...","title":"Learn Azure Functions","createdAt":"..."}
+
+# Missing title (400 Bad Request)
+curl -i -X POST "http://localhost:7137/api/todos" \
+  -H "Content-Type: application/json" \
+  -d '{}'
+# {"error":"Field 'title' is required."}
+
+# Invalid JSON (400 Bad Request)
+curl -i -X POST "http://localhost:7137/api/todos" \
+  -H "Content-Type: application/json" \
+  -d 'not json'
+# {"error":"Request body must be valid JSON."}
+```
+
 ### Deploy and test in Azure
 
 ```bash
@@ -59,8 +89,11 @@ After deploy, replace `localhost:7137` with your Function App URL from `azd show
 ms-docs-azure-functions-demo/
 ├── Program.cs
 ├── functions/
+│   ├── CreateTodo.cs
 │   ├── Greetuser.cs
 │   └── HttpExample.cs
+├── models/
+│   └── Todo.cs
 ├── Properties/
 │   └── launchSettings.json
 ├── infra/
