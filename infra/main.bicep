@@ -27,6 +27,8 @@ param storageAccountName string = ''
 param vNetName string = ''
 @description('Id of the user identity to be used for testing and debugging. This is not required in production. Leave empty if not needed.')
 param principalId string = deployer().objectId
+@description('Grant storage and monitoring access to principalId for local development. Disable in CI where the deployer is a service principal.')
+param allowUserIdentityPrincipal bool = true
 
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
@@ -119,7 +121,6 @@ var storageEndpointConfig = {
   enableQueue: false
   enableTable: false
   enableFiles: false
-  allowUserIdentityPrincipal: true
 }
 
 module rbac 'app/rbac.bicep' = {
@@ -133,7 +134,7 @@ module rbac 'app/rbac.bicep' = {
     enableBlob: storageEndpointConfig.enableBlob
     enableQueue: storageEndpointConfig.enableQueue
     enableTable: storageEndpointConfig.enableTable
-    allowUserIdentityPrincipal: storageEndpointConfig.allowUserIdentityPrincipal
+    allowUserIdentityPrincipal: allowUserIdentityPrincipal
   }
 }
 

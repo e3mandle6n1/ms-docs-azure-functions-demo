@@ -13,6 +13,9 @@
     },
     "vnetEnabled": {
       "value": "${VNET_ENABLED}"
+    },
+    "allowUserIdentityPrincipal": {
+      "value": "${ALLOW_USER_IDENTITY_PRINCIPAL=true}"
     }
   }
 }

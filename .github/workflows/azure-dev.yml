@@ -18,6 +18,7 @@ jobs:
       AZURE_LOCATION: southafricanorth
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       VNET_ENABLED: "false"
+      ALLOW_USER_IDENTITY_PRINCIPAL: "false"
 
     steps:
       - name: Checkout
