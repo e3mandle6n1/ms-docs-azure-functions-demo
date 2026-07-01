@@ -1,0 +1,8 @@
+name: ms-docs-azure-functions-demo
+metadata:
+  template: functions-quickstart-dotnet-azd@1.1.0
+services:
+  api:
+    project: .
+    language: dotnet
+    host: function
