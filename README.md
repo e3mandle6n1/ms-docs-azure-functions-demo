@@ -22,9 +22,12 @@ dotnet run
 
 The host prints the local URL when it starts (default port **7137** from `Properties/launchSettings.json`). All HTTP routes are prefixed with `/api`.
 
-## GreetUser
+## Functions
 
-`GET /api/greet` — returns a JSON greeting for the given `name` query parameter.
+<details>
+<summary><strong>GreetUser</strong> — <code>GET /api/greet</code></summary>
+
+Returns a JSON greeting for the given `name` query parameter.
 
 | Query param | Required | Description |
 |-------------|----------|-------------|
@@ -47,9 +50,12 @@ curl "http://localhost:7137/api/greet"
 # {"error":"Query parameter 'name' is required."}
 ```
 
-## CreateTodo
+</details>
 
-`POST /api/todos` — creates a todo from a JSON body and returns the created item.
+<details>
+<summary><strong>CreateTodo</strong> — <code>POST /api/todos</code></summary>
+
+Creates a todo from a JSON body and returns the created item.
 
 | Field   | Required | Description |
 |---------|----------|-------------|
@@ -77,6 +83,8 @@ curl -i -X POST "http://localhost:7137/api/todos" \
 # {"error":"Request body must be valid JSON."}
 ```
 
+</details>
+
 ### Deploy and test in Azure
 
 ```bash
@@ -84,6 +92,50 @@ azd deploy
 ```
 
 After deploy, replace `localhost:7137` with your Function App URL from `azd show`.
+
+## Troubleshooting
+
+### `azd deploy` hangs forever at "Packaging (Publishing .NET project)"
+
+**Symptoms**
+
+- `azd deploy` sits on `api: Packaging (Publishing .NET project)` indefinitely with no progress.
+- Azure resources look provisioned, but no functions appear in the Function App.
+- A plain `dotnet build` also hangs (stuck on `CoreCompile` for minutes).
+
+**Cause**
+
+The packaging phase is just `dotnet publish -c Release` running locally, it never reaches Azure. If a previous `dotnet run`, `dotnet publish`, or `azd deploy` was interrupted (Ctrl+C) or left running, its leftover processes keep holding the shared Roslyn compiler (`VBCSCompiler`) and MSBuild locks. Every new build then deadlocks waiting on them. Because nothing was ever published, no code reaches the Function App and no functions show up, that part is a downstream effect, not a separate problem.
+
+**Fix**
+
+1. Cancel the hung deploy with `Ctrl+C`.
+2. Kill leftover build/publish processes and shut down the build servers:
+
+```bash
+pkill -f "dotnet publish"
+pkill -f "dotnet run"
+dotnet build-server shutdown
+```
+
+3. Clean and verify the build works — it should finish in well under a minute for this project:
+
+```bash
+rm -rf bin obj
+dotnet build -c Release
+```
+
+4. Re-run the deploy (add `--debug` if you want to see what azd is doing behind the spinner):
+
+```bash
+azd deploy
+```
+
+**Prevention**
+
+- Never run two builds/deploys of this project at the same time.
+- After interrupting any `dotnet run` / `azd deploy` with Ctrl+C, run `dotnet build-server shutdown` before starting the next one.
+- If a function is missing after deploy, check `git status` first.
 
 ## Project structure
 
