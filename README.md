@@ -85,6 +85,35 @@ curl -i -X POST "http://localhost:7137/api/todos" \
 
 </details>
 
+<details>
+<summary><strong>EchoHeaders</strong> — <code>GET /api/echo-headers</code></summary>
+
+Returns the request headers as a JSON map, sorted alphabetically. Useful for seeing what proxies and Azure's front-end add to a request (`X-Forwarded-For`, `X-ARR-LOG-ID`, etc.).
+
+| Query param | Required | Description |
+|-------------|----------|-------------|
+| `filter`    | No       | Set to `interesting` to only return notable headers (`User-Agent`, `Host`, `X-Forwarded-*`, `CLIENT-IP`, ...). Defaults to all headers. |
+
+### Examples
+
+```bash
+# Echo all request headers
+curl "http://localhost:7137/api/echo-headers"
+# {"count":3,"headers":{"Accept":"*/*","Host":"localhost:7137","User-Agent":"curl/8.7.1"}}
+
+# Only the "interesting" headers
+curl "http://localhost:7137/api/echo-headers?filter=interesting"
+# {"count":3,"headers":{"Accept":"*/*","Host":"localhost:7137","User-Agent":"curl/8.7.1"}}
+
+# Send a custom header and see it echoed back
+curl -H "X-Demo: hello" "http://localhost:7137/api/echo-headers"
+# {"count":4,"headers":{...,"X-Demo":"hello"}}
+```
+
+Locally the two variants look similar; the difference shows up in Azure, where the proxy layer adds many extra headers.
+
+</details>
+
 ### Deploy and test in Azure
 
 ```bash
@@ -94,6 +123,34 @@ azd deploy
 After deploy, replace `localhost:7137` with your Function App URL from `azd show`.
 
 ## Troubleshooting
+
+### Clean slate checklist
+
+When a build, `dotnet run`, or `azd deploy` feels stuck:
+
+```bash
+# Stop leftover local Functions hosts and builds
+pkill -f 'dotnet run' 2>/dev/null
+pkill -f 'func host' 2>/dev/null
+pkill -f 'dotnet publish' 2>/dev/null
+
+# Release MSBuild / Roslyn compiler locks from interrupted builds
+dotnet build-server shutdown
+
+# Confirm default Functions ports are free (7071, 7137)
+lsof -i :7071 -i :7137
+
+# List any remaining deploy/build processes
+pgrep -fl 'azd|func |dotnet|MSBuild|VBCSCompiler'
+
+# Clean artifacts and verify Release build completes
+rm -rf bin obj && dotnet build -c Release
+
+# Redeploy to Azure
+azd deploy
+```
+
+Run the `pkill` / `build-server shutdown` lines after any interrupted build or deploy. If `pgrep` or `lsof` still show processes or ports in use, kill those PIDs before retrying.
 
 ### `azd deploy` hangs forever at "Packaging (Publishing .NET project)"
 
@@ -110,22 +167,8 @@ The packaging phase is just `dotnet publish -c Release` running locally, it neve
 **Fix**
 
 1. Cancel the hung deploy with `Ctrl+C`.
-2. Kill leftover build/publish processes and shut down the build servers:
-
-```bash
-pkill -f "dotnet publish"
-pkill -f "dotnet run"
-dotnet build-server shutdown
-```
-
-3. Clean and verify the build works — it should finish in well under a minute for this project:
-
-```bash
-rm -rf bin obj
-dotnet build -c Release
-```
-
-4. Re-run the deploy (add `--debug` if you want to see what azd is doing behind the spinner):
+2. Run the [clean slate checklist](#clean-slate-checklist) above.
+3. Re-run the deploy (add `--debug` if you want to see what azd is doing behind the spinner):
 
 ```bash
 azd deploy
@@ -144,6 +187,7 @@ ms-docs-azure-functions-demo/
 ├── Program.cs
 ├── functions/
 │   ├── CreateTodo.cs
+│   ├── EchoHeaders.cs
 │   ├── Greetuser.cs
 │   └── HttpExample.cs
 ├── models/
