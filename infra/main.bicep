@@ -118,7 +118,7 @@ module storage 'br/public:avm/res/storage/storage-account:0.8.3' = {
 
 var storageEndpointConfig = {
   enableBlob: true
-  enableQueue: false
+  enableQueue: true
   enableTable: false
   enableFiles: false
 }
