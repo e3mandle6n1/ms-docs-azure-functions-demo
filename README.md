@@ -114,6 +114,46 @@ Locally the two variants look similar; the difference shows up in Azure, where t
 
 </details>
 
+<details>
+<summary><strong>EnqueueMessage</strong> — <code>POST /api/messages</code></summary>
+
+Accepts a JSON body and writes the message to the `demo-messages` storage queue via a queue output binding, then returns the enqueued payload.
+
+| Field     | Required | Description |
+|-----------|----------|-------------|
+| `message` | Yes      | Message text (max 500 characters) |
+
+### Examples
+
+```bash
+# Enqueue a message (202 Accepted)
+curl -i -X POST "http://localhost:7137/api/messages" \
+  -H "Content-Type: application/json" \
+  -d '{"message":"Hello from the queue"}'
+# {"queue":"demo-messages","payload":{"id":"...","message":"Hello from the queue","enqueuedAt":"..."}}
+
+# Missing message (400 Bad Request)
+curl -i -X POST "http://localhost:7137/api/messages" \
+  -H "Content-Type: application/json" \
+  -d '{}'
+# {"error":"Field 'message' is required."}
+
+# Invalid JSON (400 Bad Request)
+curl -i -X POST "http://localhost:7137/api/messages" \
+  -H "Content-Type: application/json" \
+  -d 'not json'
+# {"error":"Request body must be valid JSON."}
+```
+
+The binding connects to storage with managed identity (`AzureWebJobsStorage__queueServiceUri`), so your local identity needs the **Storage Queue Data Contributor** role on the storage account. Inspect the queue after a request:
+
+```bash
+az storage message peek --queue-name demo-messages \
+  --account-name <storage-account> --auth-mode login
+```
+
+</details>
+
 ### Deploy and test in Azure
 
 ```bash
@@ -188,9 +228,11 @@ ms-docs-azure-functions-demo/
 ├── functions/
 │   ├── CreateTodo.cs
 │   ├── EchoHeaders.cs
+│   ├── EnqueueMessage.cs
 │   ├── Greetuser.cs
 │   └── HttpExample.cs
 ├── models/
+│   ├── QueueMessage.cs
 │   └── Todo.cs
 ├── Properties/
 │   └── launchSettings.json
