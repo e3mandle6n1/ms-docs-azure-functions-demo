@@ -110,6 +110,9 @@ module storage 'br/public:avm/res/storage/storage-account:0.8.3' = {
     blobServices: {
       containers: [{name: deploymentStorageContainerName}]
     }
+    queueServices: {
+      queues: [{name: 'demo-queue'}]
+    }
     minimumTlsVersion: 'TLS1_2'
     location: location
     tags: tags
@@ -118,7 +121,7 @@ module storage 'br/public:avm/res/storage/storage-account:0.8.3' = {
 
 var storageEndpointConfig = {
   enableBlob: true
-  enableQueue: false
+  enableQueue: true
   enableTable: false
   enableFiles: false
 }
