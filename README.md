@@ -115,42 +115,28 @@ Locally the two variants look similar; the difference shows up in Azure, where t
 </details>
 
 <details>
-<summary><strong>EnqueueMessage</strong> — <code>POST /api/messages</code></summary>
+<summary><strong>ProcessQueueMessage</strong> — queue trigger on <code>demo-queue</code></summary>
 
-Accepts a JSON body and writes the message to the `demo-messages` storage queue via a queue output binding, then returns the enqueued payload.
+Triggered whenever a message lands on the `demo-queue` storage queue. Logs the message body along with its id, dequeue count, and insertion time. There is no HTTP endpoint; you drive it by enqueuing messages.
 
-| Field     | Required | Description |
-|-----------|----------|-------------|
-| `message` | Yes      | Message text (max 500 characters) |
+The queue lives in the same storage account the Functions host uses (`AzureWebJobsStorage`), and access is via managed identity, so no connection string is needed.
 
 ### Examples
 
 ```bash
-# Enqueue a message (202 Accepted)
-curl -i -X POST "http://localhost:7137/api/messages" \
-  -H "Content-Type: application/json" \
-  -d '{"message":"Hello from the queue"}'
-# {"queue":"demo-messages","payload":{"id":"...","message":"Hello from the queue","enqueuedAt":"..."}}
+# Enqueue a message (uses your azd storage account and Azure AD auth)
+az storage message put \
+  --queue-name demo-queue \
+  --content "hello from the queue" \
+  --account-name <storage-account-name> \
+  --auth-mode login
 
-# Missing message (400 Bad Request)
-curl -i -X POST "http://localhost:7137/api/messages" \
-  -H "Content-Type: application/json" \
-  -d '{}'
-# {"error":"Field 'message' is required."}
-
-# Invalid JSON (400 Bad Request)
-curl -i -X POST "http://localhost:7137/api/messages" \
-  -H "Content-Type: application/json" \
-  -d 'not json'
-# {"error":"Request body must be valid JSON."}
+# Watch the function pick it up
+func azure functionapp logstream <function-app-name>
+# ...Processing queue message <id> (dequeue count: 1, inserted: ...): hello from the queue
 ```
 
-The binding connects to storage with managed identity (`AzureWebJobsStorage__queueServiceUri`), so your local identity needs the **Storage Queue Data Contributor** role on the storage account. Inspect the queue after a request:
-
-```bash
-az storage message peek --queue-name demo-messages \
-  --account-name <storage-account> --auth-mode login
-```
+Locally, `dotnet run` connects to the same storage account through `local.settings.json` (`AzureWebJobsStorage__queueServiceUri`), so enqueuing a message triggers the function on your machine too. Your Azure CLI login needs the **Storage Queue Data Contributor** role on the account.
 
 </details>
 
@@ -230,7 +216,8 @@ ms-docs-azure-functions-demo/
 │   ├── EchoHeaders.cs
 │   ├── EnqueueMessage.cs
 │   ├── Greetuser.cs
-│   └── HttpExample.cs
+│   ├── HttpExample.cs
+│   └── ProcessQueueMessage.cs
 ├── models/
 │   ├── QueueMessage.cs
 │   └── Todo.cs
