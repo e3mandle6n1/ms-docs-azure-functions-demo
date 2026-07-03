@@ -114,6 +114,32 @@ Locally the two variants look similar; the difference shows up in Azure, where t
 
 </details>
 
+<details>
+<summary><strong>ProcessQueueMessage</strong> — queue trigger on <code>demo-queue</code></summary>
+
+Triggered whenever a message lands on the `demo-queue` storage queue. Logs the message body along with its id, dequeue count, and insertion time. There is no HTTP endpoint; you drive it by enqueuing messages.
+
+The queue lives in the same storage account the Functions host uses (`AzureWebJobsStorage`), and access is via managed identity, so no connection string is needed.
+
+### Examples
+
+```bash
+# Enqueue a message (uses your azd storage account and Azure AD auth)
+az storage message put \
+  --queue-name demo-queue \
+  --content "hello from the queue" \
+  --account-name <storage-account-name> \
+  --auth-mode login
+
+# Watch the function pick it up
+func azure functionapp logstream <function-app-name>
+# ...Processing queue message <id> (dequeue count: 1, inserted: ...): hello from the queue
+```
+
+Locally, `dotnet run` connects to the same storage account through `local.settings.json` (`AzureWebJobsStorage__queueServiceUri`), so enqueuing a message triggers the function on your machine too. Your Azure CLI login needs the **Storage Queue Data Contributor** role on the account.
+
+</details>
+
 ### Deploy and test in Azure
 
 ```bash
@@ -189,7 +215,8 @@ ms-docs-azure-functions-demo/
 │   ├── CreateTodo.cs
 │   ├── EchoHeaders.cs
 │   ├── Greetuser.cs
-│   └── HttpExample.cs
+│   ├── HttpExample.cs
+│   └── ProcessQueueMessage.cs
 ├── models/
 │   └── Todo.cs
 ├── Properties/
