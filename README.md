@@ -214,10 +214,12 @@ ms-docs-azure-functions-demo/
 ├── functions/
 │   ├── CreateTodo.cs
 │   ├── EchoHeaders.cs
+│   ├── EnqueueMessage.cs
 │   ├── Greetuser.cs
 │   ├── HttpExample.cs
 │   └── ProcessQueueMessage.cs
 ├── models/
+│   ├── QueueMessage.cs
 │   └── Todo.cs
 ├── Properties/
 │   └── launchSettings.json
