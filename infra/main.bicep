@@ -108,7 +108,10 @@ module storage 'br/public:avm/res/storage/storage-account:0.8.3' = {
       bypass: 'AzureServices'
     }
     blobServices: {
-      containers: [{name: deploymentStorageContainerName}]
+      containers: [
+        { name: deploymentStorageContainerName }
+        { name: 'uploads' }
+      ]
     }
     queueServices: {
       queues: [{name: 'demo-queue'}]
