@@ -140,6 +140,48 @@ Locally, `dotnet run` connects to the same storage account through `local.settin
 
 </details>
 
+<details>
+<summary><strong>SaveToBlob</strong> — <code>POST /api/save</code></summary>
+
+Accepts a JSON body and writes the content to the `uploads` blob container using a blob output binding. Returns `201 Created` with blob metadata.
+
+| Field         | Required | Description |
+|---------------|----------|-------------|
+| `filename`    | Yes      | Blob name (no path separators; max 255 characters) |
+| `content`     | Yes      | Text content to store (max 1 MB) |
+| `contentType` | No       | MIME type for the response metadata. Defaults to `text/plain`. |
+
+Uses the same storage account and managed identity as the queue functions (`AzureWebJobsStorage__blobServiceUri`).
+
+### Examples
+
+```bash
+# Save a text file (201 Created)
+curl -i -X POST "http://localhost:7137/api/save" \
+  -H "Content-Type: application/json" \
+  -d '{"filename":"notes.txt","content":"Hello from Azure Functions"}'
+# {"filename":"notes.txt","blobUri":"uploads/notes.txt","contentType":"text/plain","sizeBytes":28}
+
+# With an explicit content type
+curl -i -X POST "http://localhost:7137/api/save" \
+  -H "Content-Type: application/json" \
+  -d '{"filename":"data.json","content":"{\"ok\":true}","contentType":"application/json"}'
+
+# Missing filename (400 Bad Request)
+curl -i -X POST "http://localhost:7137/api/save" \
+  -H "Content-Type: application/json" \
+  -d '{"content":"no name"}'
+# {"error":"Field 'filename' is required."}
+
+# Unsafe filename (400 Bad Request)
+curl -i -X POST "http://localhost:7137/api/save" \
+  -H "Content-Type: application/json" \
+  -d '{"filename":"../secret.txt","content":"nope"}'
+# {"error":"Field 'filename' must not contain path separators or parent-directory segments."}
+```
+
+</details>
+
 ### Deploy and test in Azure
 
 ```bash
@@ -217,9 +259,11 @@ ms-docs-azure-functions-demo/
 │   ├── EnqueueMessage.cs
 │   ├── Greetuser.cs
 │   ├── HttpExample.cs
-│   └── ProcessQueueMessage.cs
+│   ├── ProcessQueueMessage.cs
+│   └── SaveToBlob.cs
 ├── models/
 │   ├── QueueMessage.cs
+│   ├── SaveBlob.cs
 │   └── Todo.cs
 ├── Properties/
 │   └── launchSettings.json

@@ -24,6 +24,7 @@ public class SaveToBlob
         _logger = logger;
     }
 
+    //POST:{host}:{port}/api/save -> SaveToBlobOutput
     [Function("SaveToBlob")]
     public async Task<SaveToBlobOutput> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "save")] HttpRequest req)
