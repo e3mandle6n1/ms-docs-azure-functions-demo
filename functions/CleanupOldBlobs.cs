@@ -2,6 +2,7 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using My.Function.Repositories;
 
 namespace My.Function;
 
@@ -46,6 +47,11 @@ public class CleanupOldBlobs
         await foreach (BlobItem blob in container.GetBlobsAsync())
         {
             scanned++;
+
+            if (string.Equals(blob.Name, BlobTodoRepository.BlobName, StringComparison.Ordinal))
+            {
+                continue;
+            }
 
             var lastModified = blob.Properties.LastModified;
             if (lastModified is null || lastModified > cutoff)
