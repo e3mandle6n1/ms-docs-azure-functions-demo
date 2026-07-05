@@ -43,7 +43,7 @@ Replace `<port>` with the port printed in the terminal when you run `dotnet run`
 3. Expand an operation (e.g. `GET /api/greet` or `POST /api/todos`).
 4. Fill in inputs:
    - **GET** — use the **Parameters** section for query strings (`name`, `lang`, `filter`, …).
-   - **POST** — use the **Request body** JSON editor (`title` items in an array, `filename`/`content`, `message`, …). For **SaveToBlob**, set **contentType** from the query-parameter dropdown, not in the body.
+   - **POST** — use the **Request body** JSON editor (`title` items in an array, `message`, …). For **SaveToBlob** and **UploadAndProcess**, use **Choose File** to pick a file (`multipart/form-data`).
 5. Click **Execute** and inspect the response body and status code below.
 6. Switch back to the `dotnet run` terminal to confirm the function ran (`Executing 'Functions.GreetUser'`, log lines, errors, etc.).
 
@@ -218,16 +218,11 @@ Locally, `dotnet run` connects to the same storage account through `local.settin
 <details>
 <summary><strong>SaveToBlob</strong> — <code>POST /api/save</code></summary>
 
-Accepts a JSON body and writes the content to the `uploads` blob container using a blob output binding. Returns `201 Created` with blob metadata.
+Accepts a file upload (`multipart/form-data`) and writes it to the `uploads` blob container via `IBlobUploadService` (managed identity). Returns `201 Created` with blob metadata. The blob name comes from the uploaded file's name; MIME type is taken from the file when the client sends one.
 
-| Body field   | Required | Description |
-|--------------|----------|-------------|
-| `filename`   | Yes      | Blob name (no path separators; max 255 characters) |
-| `content`    | Yes      | Text content to store (max 1 MB) |
-
-| Query param    | Required | Description |
-|----------------|----------|-------------|
-| `contentType`  | No       | MIME type (`text/plain`, `application/json`, `text/html`, `text/csv`). Defaults to `text/plain`. In Swagger UI, pick from the dropdown. |
+| Form field | Required | Description |
+|------------|----------|-------------|
+| `file`     | Yes      | File to store (max 8 MB). In Swagger UI, use **Choose File**. |
 
 Uses the same storage account and managed identity as the queue functions (`AzureWebJobsStorage__blobServiceUri`).
 
@@ -236,26 +231,12 @@ Uses the same storage account and managed identity as the queue functions (`Azur
 ```bash
 # Save a text file (201 Created)
 curl -i -X POST "http://localhost:7137/api/save" \
-  -H "Content-Type: application/json" \
-  -d '{"filename":"notes.txt","content":"Hello from Azure Functions"}'
+  -F "file=@notes.txt"
 # {"filename":"notes.txt","blobUri":"uploads/notes.txt","contentType":"text/plain","sizeBytes":28}
 
-# With content type as a query parameter
-curl -i -X POST "http://localhost:7137/api/save?contentType=application/json" \
-  -H "Content-Type: application/json" \
-  -d '{"filename":"data.json","content":"{\"ok\":true}"}'
-
-# Missing filename (400 Bad Request)
-curl -i -X POST "http://localhost:7137/api/save" \
-  -H "Content-Type: application/json" \
-  -d '{"content":"no name"}'
-# {"error":"Field 'filename' is required."}
-
-# Unsafe filename (400 Bad Request)
-curl -i -X POST "http://localhost:7137/api/save" \
-  -H "Content-Type: application/json" \
-  -d '{"filename":"../secret.txt","content":"nope"}'
-# {"error":"Field 'filename' must not contain path separators or parent-directory segments."}
+# Missing file (400 Bad Request)
+curl -i -X POST "http://localhost:7137/api/save"
+# {"error":"Field 'file' is required."}
 ```
 
 </details>
@@ -333,6 +314,29 @@ curl -s "http://localhost:7137/api/weather/Paris,FR" | jq .
 
 # Unknown city (404)
 curl -i "http://localhost:7137/api/weather/NotARealCity12345"
+```
+
+</details>
+
+<details>
+<summary><strong>UploadAndProcess</strong> — <code>POST /api/upload</code> (capstone)</summary>
+
+Accepts the same `multipart/form-data` file upload as `SaveToBlob` via `IBlobUploadService`, then enqueues an upload job on `demo-queue` using a queue output binding. Returns `202 Accepted` immediately; `ProcessQueueMessage` picks up the job asynchronously.
+
+| Form field | Required | Description |
+|------------|----------|-------------|
+| `file`     | Yes      | File to store (max 8 MB). In Swagger UI, use **Choose File**. |
+
+### Examples
+
+```bash
+# Upload a file and enqueue processing (202 Accepted)
+curl -i -X POST "http://localhost:7137/api/upload" \
+  -F "file=@report.txt"
+# {"jobId":"...","queue":"demo-queue","blob":{"filename":"report.txt","blobUri":"uploads/report.txt","contentType":"text/plain","sizeBytes":17}}
+
+# Watch ProcessQueueMessage handle the job in the dotnet run terminal:
+# ...Processing upload job ... for report.txt at uploads/report.txt ...
 ```
 
 </details>
@@ -451,13 +455,19 @@ ms-docs-azure-functions-demo/
 │   ├── Heartbeat.cs
 │   ├── HttpExample.cs
 │   ├── ProcessQueueMessage.cs
-│   └── SaveToBlob.cs
+│   ├── SaveToBlob.cs
+│   └── UploadAndProcess.cs
 ├── models/
 │   ├── QueueMessage.cs
 │   ├── SaveBlob.cs
 │   ├── Todo.cs
+│   ├── UploadJob.cs
 │   └── WeatherReport.cs
 ├── services/
+│   ├── BlobUploadService.cs
+│   ├── BlobUploadStorage.cs
+│   ├── BlobUploadValidation.cs
+│   ├── IBlobUploadService.cs
 │   ├── IWeatherService.cs
 │   ├── FakeWeatherService.cs
 │   ├── WeatherApiOptions.cs
