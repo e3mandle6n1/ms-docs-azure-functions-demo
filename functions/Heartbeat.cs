@@ -7,7 +7,7 @@ public class Heartbeat
 {
     // NCRONTAB with seconds field: {second} {minute} {hour} {day} {month} {day-of-week}
     
-    //private const string Every10Seconds = "*/10 * * * * *";
+    private const string Every10Seconds = "*/10 * * * * *";
     //private const string EveryMinute = "0 * * * * *";
     //private const string Every2Minutes = "0 */2 * * * *";
     //private const string EveryHour = "0 0 * * * *";
@@ -17,7 +17,7 @@ public class Heartbeat
     //private const string EveryYear = "0 0 0 1 1 *";
     //private const string EveryMinute = "0 * * * * *";
     //private const string Every2Minutes = "0 */2 * * * *";
-    private const string EveryHour = "0 0 * * * *";
+    //private const string EveryHour = "0 0 * * * *";
     //private const string EveryDay = "0 0 0 * * *";
 
     private readonly ILogger<Heartbeat> _logger;
