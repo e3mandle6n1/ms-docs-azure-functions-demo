@@ -3,21 +3,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using My.Function.Models;
+using My.Function.Repositories;
 
 namespace My.Function;
 
 public class CreateTodo
 {
     private const int MaxTitleLength = 200;
+    private readonly ITodoRepository _todoRepository;
     private readonly ILogger<CreateTodo> _logger;
 
-    public CreateTodo(ILogger<CreateTodo> logger)
+    public CreateTodo(ITodoRepository todoRepository, ILogger<CreateTodo> logger)
     {
+        _todoRepository = todoRepository;
         _logger = logger;
     }
 
     [Function("CreateTodo")]
-    public IActionResult Run(
+    public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "todos")] HttpRequest req,
         [FromBody] IReadOnlyList<CreateTodoRequest>? todos)
     {
@@ -47,6 +50,8 @@ public class CreateTodo
 
             created.Add(new Todo(Guid.NewGuid(), title, DateTimeOffset.UtcNow));
         }
+
+        await _todoRepository.AddRangeAsync(created, req.HttpContext.RequestAborted);
 
         foreach (var todo in created)
         {

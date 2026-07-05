@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Azure.Identity;
+using Azure.Storage.Blobs;
 using Azure.Monitor.OpenTelemetry.Exporter;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi;
 using My.Function.ModelBinding;
+using My.Function.Repositories;
 using My.Function.Services;
 using My.Function.Swagger;
 using OpenTelemetry;
@@ -31,6 +33,19 @@ else
 {
     builder.Services.AddSingleton<IWeatherService, FakeWeatherService>();
 }
+
+var blobServiceUri = builder.Configuration["AzureWebJobsStorage:BlobServiceUri"]
+    ?? throw new InvalidOperationException("AzureWebJobsStorage:BlobServiceUri is required for todo persistence.");
+
+var storageClientId = builder.Configuration["AzureWebJobsStorage:ClientId"];
+var credentialOptions = new DefaultAzureCredentialOptions();
+if (!string.IsNullOrWhiteSpace(storageClientId))
+{
+    credentialOptions.ManagedIdentityClientId = storageClientId;
+}
+
+builder.Services.AddSingleton(_ => new BlobServiceClient(new Uri(blobServiceUri), new DefaultAzureCredential(credentialOptions)));
+builder.Services.AddSingleton<ITodoRepository, BlobTodoRepository>();
 
 if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING")))
 {
