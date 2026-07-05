@@ -46,6 +46,7 @@ if (!string.IsNullOrWhiteSpace(storageClientId))
 
 builder.Services.AddSingleton(_ => new BlobServiceClient(new Uri(blobServiceUri), new DefaultAzureCredential(credentialOptions)));
 builder.Services.AddSingleton<ITodoRepository, BlobTodoRepository>();
+builder.Services.AddSingleton<IBlobUploadService, BlobUploadService>();
 
 if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING")))
 {

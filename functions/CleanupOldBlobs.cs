@@ -3,6 +3,7 @@ using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using My.Function.Repositories;
+using My.Function.Services;
 
 namespace My.Function;
 
@@ -24,20 +25,20 @@ public class CleanupOldBlobs
     [Function("CleanupOldBlobs")]
     public async Task Run(
         [TimerTrigger(MondaysAt4AmUtc)] TimerInfo timer,
-        [BlobInput(SaveToBlob.ContainerName)] BlobContainerClient container)
+        [BlobInput(BlobUploadService.ContainerName)] BlobContainerClient container)
     {
         var cutoff = DateTimeOffset.UtcNow - MaxAge;
 
         _logger.LogInformation(
             "CleanupOldBlobs started at {TimestampUtc:O} (container: {Container}, cutoff: {CutoffUtc:O}, isPastDue: {IsPastDue})",
             DateTimeOffset.UtcNow,
-            SaveToBlob.ContainerName,
+            BlobUploadService.ContainerName,
             cutoff,
             timer.IsPastDue);
 
         if (!await container.ExistsAsync())
         {
-            _logger.LogInformation("Container {Container} does not exist yet; nothing to clean up.", SaveToBlob.ContainerName);
+            _logger.LogInformation("Container {Container} does not exist yet; nothing to clean up.", BlobUploadService.ContainerName);
             return;
         }
 
