@@ -30,10 +30,10 @@ public class EchoHeaders
 
     [Function("EchoHeaders")]
     public IActionResult Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "echo-headers")] HttpRequest req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "echo-headers")] HttpRequest req,
+        [FromQuery] string? filter)
     {
-        var interestingOnly = req.Query["filter"].ToString()
-            .Equals("interesting", StringComparison.OrdinalIgnoreCase);
+        var interestingOnly = filter?.Equals("interesting", StringComparison.OrdinalIgnoreCase) == true;
 
         var headers = req.Headers
             .Where(h => !interestingOnly || InterestingHeaders.Contains(h.Key, StringComparer.OrdinalIgnoreCase))

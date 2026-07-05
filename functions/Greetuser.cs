@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using My.Function.Models;
 
 namespace My.Function;
 
@@ -16,30 +17,27 @@ public class GreetUser
 
     [Function("GreetUser")]
     public IActionResult Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "greet")] HttpRequest req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "greet")] HttpRequest req,
+        [FromQuery] string? name,
+        [FromQuery] GreetLanguage lang = GreetLanguage.En)
     {
-        var name = req.Query["name"].ToString();
-
         if (string.IsNullOrWhiteSpace(name))
         {
             return new BadRequestObjectResult(new { error = "Query parameter 'name' is required." });
         }
 
-        var lang = req.Query["lang"].ToString();
-        var message = string.IsNullOrWhiteSpace(lang)
-            ? $"Hello, {name}!"
-            : GetLocalizedGreeting(name, lang);
+        var message = GetLocalizedGreeting(name, lang);
 
-        _logger.LogInformation("Greeted {Name} (lang: {Lang})", name, lang ?? "en");
+        _logger.LogInformation("Greeted {Name} (lang: {Lang})", name, lang);
 
         return new OkObjectResult(new { message });
     }
 
-    private static string GetLocalizedGreeting(string name, string lang) => lang.ToLowerInvariant() switch
+    private static string GetLocalizedGreeting(string name, GreetLanguage lang) => lang switch
     {
-        "fr" => $"Bonjour, {name}!",
-        "es" => $"Hola, {name}!",
-        "de" => $"Hallo, {name}!",
+        GreetLanguage.Fr => $"Bonjour, {name}!",
+        GreetLanguage.Es => $"Hola, {name}!",
+        GreetLanguage.De => $"Hallo, {name}!",
         _ => $"Hello, {name}!"
     };
 }

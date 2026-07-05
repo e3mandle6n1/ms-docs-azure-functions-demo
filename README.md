@@ -7,6 +7,7 @@
 ![Azure Functions](https://img.shields.io/badge/Azure_Functions-v4-0062AD?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyBpZD0iYTJjODgzMDYtZmEwMy00ZTViLWIxOTItNDAxZjBiNzc4MDhiIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE4IDE4Ij48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImI0MDNhY2E3LWYzODctNDQzNC05NmI0LWFlMTU3ZWRjODM1ZiIgeDE9Ii0xNzUuOTkzIiB5MT0iLTM0My43MjMiIHgyPSItMTc1Ljk5MyIgeTI9Ii0zNTkuMjMyIiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKDIxMi41NzMgMzcwLjU0OCkgc2NhbGUoMS4xNTYgMS4wMjkpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI%2BPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmVhMTFiIiAvPjxzdG9wIG9mZnNldD0iMC4yODQiIHN0b3AtY29sb3I9IiNmZWE1MWEiIC8%2BPHN0b3Agb2Zmc2V0PSIwLjU0NyIgc3RvcC1jb2xvcj0iI2ZlYjAxOCIgLz48c3RvcCBvZmZzZXQ9IjAuOCIgc3RvcC1jb2xvcj0iI2ZmYzMxNCIgLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZmQ3MGYiIC8%2BPC9saW5lYXJHcmFkaWVudD48L2RlZnM%2BPHRpdGxlPkljb24tY29tcHV0ZS0yOTwvdGl0bGU%2BPGc%2BPHBhdGggZD0iTTIuMzcsNy40NzVIMy4yYS4yNjcuMjY3LDAsMCwxLC4yNjcuMjY3djYuMTQ4YS41MzMuNTMzLDAsMCwxLS41MzMuNTMzSDIuMWEwLDAsMCwwLDEsMCwwVjcuNzQxYS4yNjcuMjY3LDAsMCwxLC4yNjctLjI2N1oiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEyLjUwNyAxNi43MDUpIHJvdGF0ZSgxMzQuOTE5KSIgZmlsbD0iIzUwZTZmZiIgLz48cGF0aCBkPSJNMi4zMjUsMy42aC44MzNhLjI2Ny4yNjcsMCwwLDEsLjI2Ny4yNjd2Ni41ODNhMCwwLDAsMCwxLDAsMEgyLjU5MWEuNTMzLjUzMywwLDAsMS0uNTMzLS41MzNWMy44NjVBLjI2Ny4yNjcsMCwwLDEsMi4zMjUsMy42WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNS43NTkgMC4xMTQpIHJvdGF0ZSg0NC45MTkpIiBmaWxsPSIjMTQ5MGRmIiAvPjwvZz48Zz48cGF0aCBkPSJNMTQuNTMsNy40NzVoLjgzM2EuNTMzLjUzMywwLDAsMSwuNTMzLjUzM3Y2LjE0OGEuMjY3LjI2NywwLDAsMS0uMjY3LjI2N0gxNC44YS4yNjcuMjY3LDAsMCwxLS4yNjctLjI2N1Y3LjQ3NWEwLDAsMCwwLDEsMCwwWiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIuMjIzIC03LjU1NSkgcm90YXRlKDQ1LjA4MSkiIGZpbGw9IiM1MGU2ZmYiIC8%2BPHBhdGggZD0iTTE1LjEwOCwzLjZoLjgzM2EwLDAsMCwwLDEsMCwwdjYuNTgzYS4yNjcuMjY3LDAsMCwxLS4yNjcuMjY3aC0uODMzYS4yNjcuMjY3LDAsMCwxLS4yNjctLjI2N1Y0LjEzMWEuNTMzLjUzMywwLDAsMSwuNTMzLS41MzNaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMS4wMjIgMS4yMjIpIHJvdGF0ZSgxMzUuMDgxKSIgZmlsbD0iIzE0OTBkZiIgLz48L2c%2BPHBhdGggZD0iTTguNDU5LDkuOUg0Ljg3YS4xOTMuMTkzLDAsMCwxLS4yLS4xODEuMTY2LjE2NiwwLDAsMSwuMDE4LS4wNzVMOC45OTEsMS4xM2EuMjA2LjIwNiwwLDAsMSwuMTg2LS4xMDZoNC4yNDVhLjE5My4xOTMsMCwwLDEsLjIuMTgxLjE2NS4xNjUsMCwwLDEtLjAzNS4xTDguNTM0LDcuOTY2aDQuOTI4YS4xOTMuMTkzLDAsMCwxLC4yLjE4MS4xNzYuMTc2LDAsMCwxLS4wNTIuMTIyTDUuNDIxLDE2Ljc4OGMtLjA3Ny4wNDYtLjYyNC41LS4zNTYtLjE4OWgwWiIgZmlsbD0idXJsKCNiNDAzYWNhNy1mMzg3LTQ0MzQtOTZiNC1hZTE1N2VkYzgzNWYpIiAvPjwvc3ZnPg%3D%3D)
 ![C#](https://img.shields.io/badge/C%23-Isolated_Worker-239120?logo=dotnet&logoColor=white)
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-HTTP-512BD4?logo=dotnet&logoColor=white)
+[![Swagger](https://img.shields.io/badge/Swagger-OpenAPI-85EA2D?logo=swagger&logoColor=black)](#interactive-api-explorer-swagger)
 ![Azure Developer CLI](https://img.shields.io/badge/Azure_Developer_CLI-azd-0078D4?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyBpZD0idXVpZC1mYmJiZWVkZi03ZjAzLTRkNjItYjBmMC1hNGI2ODljMDQxZDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiB2aWV3Qm94PSIwIDAgMTggMTgiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0idXVpZC03Y2QwYWU0Ny02NDE0LTRiOTMtYWJjOS1hNzA1MTk3MDEzN2EiIHgxPSI5IiB5MT0iMTYuNjg2IiB4Mj0iOSIgeTI9IjEzLjM3NyIgZ3JhZGllbnRUcmFuc2Zvcm09Im1hdHJpeCgxLCAwLCAwLCAxLCAwLCAwKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIG9mZnNldD0iLjAwMSIgc3RvcC1jb2xvcj0iIzM3YzJiMSIgLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMzY2Q0YzIiIC8%2BPC9saW5lYXJHcmFkaWVudD48bGluZWFyR3JhZGllbnQgaWQ9InV1aWQtYjEwMWFlNDUtNDYxYS00ZGU3LWIxYTAtZjNlMjllYTk2Y2M3IiB4MT0iOC45ODUiIHkxPSI3NzkuMTU4IiB4Mj0iOC45ODUiIHkyPSI3OTEuMTA4IiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKDAgNzkxLjUxNikgc2NhbGUoMSAtMSkiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwMDc4ZDQiIC8%2BPHN0b3Agb2Zmc2V0PSIuMTU2IiBzdG9wLWNvbG9yPSIjMTM4MGRhIiAvPjxzdG9wIG9mZnNldD0iLjUyOCIgc3RvcC1jb2xvcj0iIzNjOTFlNSIgLz48c3RvcCBvZmZzZXQ9Ii44MjIiIHN0b3AtY29sb3I9IiM1NTljZWMiIC8%2BPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNWVhMGVmIiAvPjwvbGluZWFyR3JhZGllbnQ%2BPC9kZWZzPjxnPjxwYXRoIGQ9Ik0xOCwxNi42ODZIMGwzLjMzMi0zLjE0OWMuMTA4LS4xMDIsLjI1MS0uMTYsLjQtLjE2SDE0LjY4Yy4wODMsMCwuMTY1LC4wMTksLjI0LC4wNTMsLjA3NiwuMDM1LC4xNDMsLjA4NSwuMTk4LC4xNDdsMi44ODIsMy4xMDlaIiBmaWxsPSJ1cmwoI3V1aWQtN2NkMGFlNDctNjQxNC00YjkzLWFiYzktYTcwNTE5NzAxMzdhKSIgLz48cGF0aCBkPSJNMCwxNi42ODZIMTh2LjQxYzAsLjE1NS0uMDYyLC4zMDUtLjE3MiwuNDE0cy0uMjU5LC4xNzItLjQxNCwuMTcySC41ODZjLS4xNTUsMC0uMzA0LS4wNjItLjQxNC0uMTcyLS4xMS0uMTEtLjE3Mi0uMjU5LS4xNzItLjQxNHYtLjQxWiIgZmlsbD0iIzNjZDRjMiIgLz48cGF0aCBkPSJNMTcuNDMsOC42MThjLS4wMjYtLjg5OS0uMzcxLTEuNzU5LS45NzQtMi40MjYtLjYwMy0uNjY3LTEuNDI0LTEuMDk3LTIuMzE2LTEuMjE0LS4wNTItMS4yNTYtLjU5OC0yLjQ0Mi0xLjUyLTMuMjk3LS45MjEtLjg1Ni0yLjE0NC0xLjMxMy0zLjQtMS4yNzMtMS4wMTQtLjAxNy0yLjAwOCwuMjgxLTIuODQ2LC44NTItLjgzOCwuNTcxLTEuNDc5LDEuMzg4LTEuODM0LDIuMzM4LTEuMDc4LC4xMjQtMi4wNzUsLjYzMi0yLjgwOSwxLjQzMS0uNzM0LC43OTktMS4xNTcsMS44MzUtMS4xOTEsMi45MTksLjAxOCwuNjA4LC4xNTYsMS4yMDYsLjQwNywxLjc2LC4yNTEsLjU1NCwuNjA4LDEuMDUzLDEuMDUzLDEuNDY3LC40NDQsLjQxNSwuOTY3LC43MzcsMS41MzcsLjk0OSwuNTcsLjIxMiwxLjE3NiwuMzA4LDEuNzg0LC4yODRIMTMuNjNjMS4wMDMtLjAxLDEuOTYyLS40MTMsMi42NzItMS4xMjEsLjcxLS43MDgsMS4xMTUtMS42NjYsMS4xMjgtMi42NjlaIiBmaWxsPSJ1cmwoI3V1aWQtYjEwMWFlNDUtNDYxYS00ZGU3LWIxYTAtZjNlMjllYTk2Y2M3KSIgLz48cGF0aCBkPSJNNi4zNiw2Ljg2OGwyLjY0LTIuNTljLjAyOC0uMDI5LC4wNjEtLjA1MiwuMDk4LS4wNjcsLjAzNy0uMDE2LC4wNzctLjAyNCwuMTE3LS4wMjRzLjA4LC4wMDgsLjExNywuMDI0Yy4wMzcsLjAxNiwuMDcsLjAzOCwuMDk4LC4wNjdsMi41NywyLjU5Yy4wMjIsLjAxOCwuMDM4LC4wNDMsLjA0NSwuMDcsLjAwNywuMDI4LC4wMDQsLjA1Ny0uMDA3LC4wODMtLjAxMSwuMDI2LS4wMzEsLjA0OC0uMDU2LC4wNjItLjAyNSwuMDE0LS4wNTQsLjAxOS0uMDgyLC4wMTVoLTEuNjJjLS4wMzYsLjAwMi0uMDcxLC4wMTgtLjA5NiwuMDQ0LS4wMjYsLjAyNi0uMDQxLC4wNi0uMDQ0LC4wOTZsLS4wMjEsNS4wNzJjMCwuMDI5LS4wMTIsLjA1Ny0uMDMyLC4wNzgtLjAyMSwuMDIxLS4wNDksLjAzMi0uMDc4LC4wMzJoLTEuNzRjLS4wMjksMC0uMDU3LS4wMTItLjA3OC0uMDMyLS4wMjEtLjAyMS0uMDMyLS4wNDktLjAzMi0uMDc4bC4wMjEtNS4wNzJjMC0uMDM1LS4wMTMtLjA3LS4wMzctLjA5Ni0uMDI0LS4wMjYtLjA1Ny0uMDQyLS4wOTMtLjA0NGgtMS42Yy0uMDI3LC4wMDItLjA1NC0uMDA2LS4wNzctLjAycy0uMDQxLS4wMzYtLjA1MS0uMDYyYy0uMDEtLjAyNS0uMDEyLS4wNTMtLjAwNS0uMDgsLjAwNy0uMDI2LC4wMjItLjA1LC4wNDMtLjA2OFoiIGZpbGw9IiNmMmYyZjIiIC8%2BPC9nPjwvc3ZnPg%3D%3D)
 ![OpenTelemetry](https://img.shields.io/badge/OpenTelemetry-Enabled-000000?logo=opentelemetry&logoColor=white)
 ![Application Insights](https://img.shields.io/badge/Application_Insights-Monitoring-68217A?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyBpZD0iYjZmNmQ5OWUtZjMzMC00ODFkLTgzNmYtZWE1OGNjNDIyMTdmIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE4IDE4Ij48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImE3YTFjNDMxLTZjNmQtNGE4Zi05YTY5LThkYTQzN2U1YjBjNSIgY3g9IjkiIGN5PSI3LjM1IiByPSI2LjQyIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI%2BPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYjc3YWY0IiAvPjxzdG9wIG9mZnNldD0iMC4yMSIgc3RvcC1jb2xvcj0iI2IzNzhmMiIgLz48c3RvcCBvZmZzZXQ9IjAuNDMiIHN0b3AtY29sb3I9IiNhNjcyZWQiIC8%2BPHN0b3Agb2Zmc2V0PSIwLjY1IiBzdG9wLWNvbG9yPSIjOTI2N2U0IiAvPjxzdG9wIG9mZnNldD0iMC44OCIgc3RvcC1jb2xvcj0iIzc1NTlkOCIgLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2MjRmZDAiIC8%2BPC9yYWRpYWxHcmFkaWVudD48bGluZWFyR3JhZGllbnQgaWQ9ImVjMGM0ZjBkLTVjOGUtNDg4Mi05NmExLTg5ZDYxODA4ZWI0OSIgeDE9IjkuMDIiIHkxPSIzLjkxIiB4Mj0iOS4wOCIgeTI9IjExLjQ5IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI%2BPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZjJmMmYyIiAvPjxzdG9wIG9mZnNldD0iMC4yMyIgc3RvcC1jb2xvcj0iI2YxZjFmMiIgc3RvcC1vcGFjaXR5PSIwLjk5IiAvPjxzdG9wIG9mZnNldD0iMC4zNyIgc3RvcC1jb2xvcj0iI2VkZWRmMSIgc3RvcC1vcGFjaXR5PSIwLjk1IiAvPjxzdG9wIG9mZnNldD0iMC40OCIgc3RvcC1jb2xvcj0iI2U3ZTVmMCIgc3RvcC1vcGFjaXR5PSIwLjg5IiAvPjxzdG9wIG9mZnNldD0iMC41OCIgc3RvcC1jb2xvcj0iI2RlZGJlZSIgc3RvcC1vcGFjaXR5PSIwLjgxIiAvPjxzdG9wIG9mZnNldD0iMC42NyIgc3RvcC1jb2xvcj0iI2QzY2VlYiIgc3RvcC1vcGFjaXR5PSIwLjciIC8%2BPHN0b3Agb2Zmc2V0PSIwLjc2IiBzdG9wLWNvbG9yPSIjYzRiZWU4IiBzdG9wLW9wYWNpdHk9IjAuNTciIC8%2BPHN0b3Agb2Zmc2V0PSIwLjg0IiBzdG9wLWNvbG9yPSIjYjRhYmU1IiBzdG9wLW9wYWNpdHk9IjAuNDEiIC8%2BPHN0b3Agb2Zmc2V0PSIwLjkyIiBzdG9wLWNvbG9yPSIjYTA5NWUxIiBzdG9wLW9wYWNpdHk9IjAuMjIiIC8%2BPHN0b3Agb2Zmc2V0PSIwLjk5IiBzdG9wLWNvbG9yPSIjOGI3ZGRjIiBzdG9wLW9wYWNpdHk9IjAuMDIiIC8%2BPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjODk3YmRjIiBzdG9wLW9wYWNpdHk9IjAiIC8%2BPC9saW5lYXJHcmFkaWVudD48L2RlZnM%2BPHRpdGxlPkljb24tbWFuYWdlLTMxMDwvdGl0bGU%2BPHBhdGggZD0iTTEwLjIzLDE3LjM5bC44MS0uODdWMTQuMkg3djIuMzJsLjgxLjg3QS4zMi4zMiwwLDAsMCw4LDE3LjVoMkEuMzIuMzIsMCwwLDAsMTAuMjMsMTcuMzlaIiBmaWxsPSIjY2VjZWNlIiAvPjxwYXRoIGQ9Ik05LC41QTUuODksNS44OSwwLDAsMCwzLjA5LDcuMDdjLjI3LDIuNDcsMi42MiwzLjYyLDMuMjksNi43NWEuNDkuNDksMCwwLDAsLjQ3LjM4aDQuM2EuNDkuNDksMCwwLDAsLjQ3LS4zOGMuNjctMy4xMywzLTQuMjgsMy4yOS02Ljc1QTUuODksNS44OSwwLDAsMCw5LC41Wk03LDE0LjIiIGZpbGw9InVybCgjYTdhMWM0MzEtNmM2ZC00YThmLTlhNjktOGRhNDM3ZTViMGM1KSIgLz48cGF0aCBkPSJNMTEuNDYsMy43OWExLjQsMS40LDAsMCwwLTEuMzUsMS40NFY2SDhWNS4yM0ExLjQxLDEuNDEsMCwwLDAsNi41OSwzLjc5LDEuNCwxLjQsMCwwLDAsNS4yNCw1LjIzLDEuNDEsMS40MSwwLDAsMCw2LjU5LDYuNjhoLjY0djZhLjM2LjM2LDAsMCwwLC43Miwwdi02aDIuMTZ2NmEuMzYuMzYsMCwxLDAsLjcyLDB2LTZoLjYzYTEuNCwxLjQsMCwwLDAsMS4zNS0xLjQ1QTEuNCwxLjQsMCwwLDAsMTEuNDYsMy43OVpNNy4yMyw2SDYuNTVhLjc0Ljc0LDAsMCwxLS42OC0uNzcuNzQuNzQsMCwwLDEsLjY4LS43Ny43NC43NCwwLDAsMSwuNjguNzdabTQuMjgsMGgtLjY4VjUuMTlhLjY4LjY4LDAsMSwxLDEuMzUsMEEuNzMuNzMsMCwwLDEsMTEuNTEsNloiIGZpbGw9InVybCgjZWMwYzRmMGQtNWM4ZS00ODgyLTk2YTEtODlkNjE4MDhlYjQ5KSIgLz48cG9seWdvbiBwb2ludHM9IjYuOTYgMTUuOCAxMS4wNCAxNS4wMSAxMS4wNCAxNC41NiA2Ljk2IDE1LjM2IDYuOTYgMTUuOCIgZmlsbD0iIzk5OSIgLz48cG9seWdvbiBwb2ludHM9IjExLjA0IDE2LjExIDExLjA0IDE1LjY3IDYuOTYgMTYuNDggNi45NiAxNi41MiA3LjI3IDE2Ljg2IDExLjA0IDE2LjExIiBmaWxsPSIjOTk5IiAvPjwvc3ZnPg%3D%3D)
@@ -22,7 +23,33 @@ Azure Functions (.NET 10 isolated worker) demo project deployed with [Azure Deve
 dotnet run
 ```
 
-The host prints the local URL when it starts (default port **7137** from `Properties/launchSettings.json`). All HTTP routes are prefixed with `/api`.
+When the host starts, **check the terminal output** — it lists every function URL and the port the host is listening on (often **7071**, not necessarily the value in `launchSettings.json`). All HTTP routes are prefixed with `/api`.
+
+## Interactive API explorer (Swagger)
+
+This project serves a [Swagger UI](https://swagger.io/tools/swagger-ui/) at **`/api/swagger`**, wired up in `Program.cs` via [AzureFunctions.Worker.Extensions.Swashbuckle](https://www.nuget.org/packages/AzureFunctions.Worker.Extensions.Swashbuckle). Use it to browse HTTP endpoints, fill in parameters, send requests, and read responses without writing `curl` commands.
+
+| Environment | URL |
+|-------------|-----|
+| Local       | `http://localhost:<port>/api/swagger` |
+| Azure       | `https://<function-app-name>.azurewebsites.net/api/swagger` |
+
+Replace `<port>` with the port printed in the terminal when you run `dotnet run` (see the `Functions:` block). After `azd deploy`, use your Function App hostname from `azd show`.
+
+### How to use it
+
+1. Start the host with `dotnet run` and leave that terminal visible — **function invocations and errors are logged there**.
+2. Open `/api/swagger` in your browser.
+3. Expand an operation (e.g. `GET /api/greet` or `POST /api/todos`).
+4. Fill in inputs:
+   - **GET** — use the **Parameters** section for query strings (`name`, `lang`, `filter`, …).
+   - **POST** — use the **Request body** JSON editor (`title` items in an array, `filename`/`content`, `message`, …). For **SaveToBlob**, set **contentType** from the query-parameter dropdown, not in the body.
+5. Click **Execute** and inspect the response body and status code below.
+6. Switch back to the `dotnet run` terminal to confirm the function ran (`Executing 'Functions.GreetUser'`, log lines, errors, etc.).
+
+Timer and queue triggers (`Heartbeat`, `ProcessQueueMessage`, `CleanupOldBlobs`) do not appear in Swagger — they have no HTTP endpoint. `HttpExample` is hidden from the docs (`[ApiExplorerSettings(IgnoreApi = true)]`) but still works at `/api/HttpExample`.
+
+OpenAPI JSON is also available at `/api/swagger/v1/swagger.json` if you want the raw spec.
 
 ## Run in Docker
 
@@ -80,12 +107,12 @@ Returns a JSON greeting for the given `name` query parameter.
 | Query param | Required | Description |
 |-------------|----------|-------------|
 | `name`      | Yes      | Name to greet |
-| `lang`      | No       | Language code (`en`, `fr`, `es`, `de`). Defaults to English. |
+| `lang`      | No       | Language (`en`, `fr`, `es`, `de`). Defaults to `en`. In Swagger UI, pick from the dropdown. |
 
 ### Examples
 
 ```bash
-# Basic greeting
+# Basic greeting (English)
 curl "http://localhost:7137/api/greet?name=Emandleni"
 # {"message":"Hello, Emandleni!"}
 
@@ -103,32 +130,32 @@ curl "http://localhost:7137/api/greet"
 <details>
 <summary><strong>CreateTodo</strong> — <code>POST /api/todos</code></summary>
 
-Creates a todo from a JSON body and returns the created item.
+Creates one or more todos from a JSON array and returns the created items.
 
-| Field   | Required | Description |
-|---------|----------|-------------|
-| `title` | Yes      | Todo title (max 200 characters) |
+| Field (per item) | Required | Description |
+|------------------|----------|-------------|
+| `title`          | Yes      | Todo title (max 200 characters) |
 
 ### Examples
 
 ```bash
-# Create a todo (201 Created)
+# Create a single todo (201 Created)
 curl -i -X POST "http://localhost:7137/api/todos" \
   -H "Content-Type: application/json" \
-  -d '{"title":"Learn Azure Functions"}'
-# {"id":"...","title":"Learn Azure Functions","createdAt":"..."}
+  -d '[{"title":"Learn Azure Functions"}]'
+# {"todos":[{"id":"...","title":"Learn Azure Functions","createdAt":"..."}]}
 
-# Missing title (400 Bad Request)
+# Create multiple todos in one request
 curl -i -X POST "http://localhost:7137/api/todos" \
   -H "Content-Type: application/json" \
-  -d '{}'
-# {"error":"Field 'title' is required."}
+  -d '[{"title":"Buy milk"},{"title":"Write docs"}]'
+# {"todos":[{"id":"...","title":"Buy milk",...},{"id":"...","title":"Write docs",...}]}
 
-# Invalid JSON (400 Bad Request)
+# Empty array (400 Bad Request)
 curl -i -X POST "http://localhost:7137/api/todos" \
   -H "Content-Type: application/json" \
-  -d 'not json'
-# {"error":"Request body must be valid JSON."}
+  -d '[]'
+# {"error":"Request body must be a non-empty JSON array of todos."}
 ```
 
 </details>
@@ -193,11 +220,14 @@ Locally, `dotnet run` connects to the same storage account through `local.settin
 
 Accepts a JSON body and writes the content to the `uploads` blob container using a blob output binding. Returns `201 Created` with blob metadata.
 
-| Field         | Required | Description |
-|---------------|----------|-------------|
-| `filename`    | Yes      | Blob name (no path separators; max 255 characters) |
-| `content`     | Yes      | Text content to store (max 1 MB) |
-| `contentType` | No       | MIME type for the response metadata. Defaults to `text/plain`. |
+| Body field   | Required | Description |
+|--------------|----------|-------------|
+| `filename`   | Yes      | Blob name (no path separators; max 255 characters) |
+| `content`    | Yes      | Text content to store (max 1 MB) |
+
+| Query param    | Required | Description |
+|----------------|----------|-------------|
+| `contentType`  | No       | MIME type (`text/plain`, `application/json`, `text/html`, `text/csv`). Defaults to `text/plain`. In Swagger UI, pick from the dropdown. |
 
 Uses the same storage account and managed identity as the queue functions (`AzureWebJobsStorage__blobServiceUri`).
 
@@ -210,10 +240,10 @@ curl -i -X POST "http://localhost:7137/api/save" \
   -d '{"filename":"notes.txt","content":"Hello from Azure Functions"}'
 # {"filename":"notes.txt","blobUri":"uploads/notes.txt","contentType":"text/plain","sizeBytes":28}
 
-# With an explicit content type
-curl -i -X POST "http://localhost:7137/api/save" \
+# With content type as a query parameter
+curl -i -X POST "http://localhost:7137/api/save?contentType=application/json" \
   -H "Content-Type: application/json" \
-  -d '{"filename":"data.json","content":"{\"ok\":true}","contentType":"application/json"}'
+  -d '{"filename":"data.json","content":"{\"ok\":true}"}'
 
 # Missing filename (400 Bad Request)
 curl -i -X POST "http://localhost:7137/api/save" \
@@ -313,7 +343,7 @@ curl -i "http://localhost:7137/api/weather/NotARealCity12345"
 azd deploy
 ```
 
-After deploy, replace `localhost:7137` with your Function App URL from `azd show`.
+After deploy, replace `localhost:<port>` in the examples below with your Function App URL from `azd show`. Swagger UI is at `https://<function-app-name>.azurewebsites.net/api/swagger`.
 
 ## Monitoring (KQL)
 
