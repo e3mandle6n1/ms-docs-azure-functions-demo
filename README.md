@@ -230,6 +230,27 @@ curl -i -X POST "http://localhost:7137/api/save" \
 
 </details>
 
+<details>
+<summary><strong>CleanupOldBlobs</strong> — timer trigger, Mondays at 04:00 UTC</summary>
+
+Maintenance job that sweeps the `uploads` container every Monday at 04:00 UTC and deletes blobs last modified more than **2 days** ago. There is no HTTP endpoint; it demonstrates combining a timer trigger with a `BlobContainerClient` input binding (the Blob SDK) for housekeeping work.
+
+Uses the same storage account and managed identity as the other storage functions (`AzureWebJobsStorage__blobServiceUri`), so no connection string is needed. Failed deletes are logged and skipped so one bad blob doesn't abort the sweep.
+
+### Examples
+
+```bash
+# Watch the cleanup run in Azure
+func azure functionapp logstream <function-app-name>
+# ...CleanupOldBlobs started at ... (container: uploads, cutoff: ...)
+# ...Deleted blob notes.txt (last modified ...)
+# ...CleanupOldBlobs finished: scanned 5 blob(s), deleted 2 older than 2 days.
+```
+
+To watch it locally without waiting for Monday 04:00 UTC, temporarily change the NCRONTAB expression in `functions/CleanupOldBlobs.cs` (e.g. to `*/30 * * * * *`) and run `dotnet run`.
+
+</details>
+
 ### Deploy and test in Azure
 
 ```bash
@@ -335,6 +356,7 @@ azd deploy
 ms-docs-azure-functions-demo/
 ├── Program.cs
 ├── functions/
+│   ├── CleanupOldBlobs.cs
 │   ├── CreateTodo.cs
 │   ├── EchoHeaders.cs
 │   ├── EnqueueMessage.cs
