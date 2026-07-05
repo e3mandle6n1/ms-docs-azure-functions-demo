@@ -29,6 +29,9 @@ var kind = 'functionapp,linux'
 var baseAppSettings = {
   AzureWebJobsStorage__credential: 'managedidentity'
   AzureWebJobsStorage__clientId: identityClientId
+  // Lets DefaultAzureCredential in the worker resolve the user-assigned managed
+  // identity, required for Entra-authenticated App Insights ingestion.
+  AZURE_CLIENT_ID: identityClientId
   APPLICATIONINSIGHTS_AUTHENTICATION_STRING: applicationInsightsIdentity
   APPLICATIONINSIGHTS_CONNECTION_STRING: applicationInsights.properties.ConnectionString
 }
