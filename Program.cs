@@ -1,3 +1,4 @@
+using Azure.Identity;
 using Azure.Monitor.OpenTelemetry.Exporter;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
@@ -14,7 +15,7 @@ if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("APPLICATIONINSIGHT
 {
     builder.Services.AddOpenTelemetry()
         .UseFunctionsWorkerDefaults()
-        .UseAzureMonitorExporter();
+        .UseAzureMonitorExporter(options => options.Credential = new DefaultAzureCredential());
 }
 
 builder.Build().Run();
