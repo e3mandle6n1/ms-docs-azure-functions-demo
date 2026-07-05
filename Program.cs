@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi;
 using My.Function.ModelBinding;
+using My.Function.Services;
 using My.Function.Swagger;
 using OpenTelemetry;
 
