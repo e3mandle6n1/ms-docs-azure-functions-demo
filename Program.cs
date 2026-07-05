@@ -62,6 +62,14 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1"
     });
     options.SchemaFilter<StringEnumSchemaFilter>();
+    options.DocumentFilter<HealthFirstDocumentFilter>();
+    options.OrderActionsBy(apiDesc =>
+    {
+        var path = apiDesc.RelativePath ?? string.Empty;
+        return path.Contains("health", StringComparison.OrdinalIgnoreCase)
+            ? $"0_{path}"
+            : $"1_{path}";
+    });
     options.UseInlineDefinitionsForEnums();
 });
 
