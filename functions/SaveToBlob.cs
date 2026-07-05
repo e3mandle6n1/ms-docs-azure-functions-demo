@@ -26,19 +26,11 @@ public class SaveToBlob
 
     //POST:{host}:{port}/api/save -> SaveToBlobOutput
     [Function("SaveToBlob")]
-    public async Task<SaveToBlobOutput> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "save")] HttpRequest req)
+    public Task<SaveToBlobOutput> Run(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "save")] HttpRequest req,
+        [FromBody] SaveBlobRequest? request,
+        [FromQuery] BlobContentType contentType = BlobContentType.TextPlain)
     {
-        SaveBlobRequest? request;
-        try
-        {
-            request = await JsonSerializer.DeserializeAsync<SaveBlobRequest>(req.Body, SerializerOptions);
-        }
-        catch (JsonException)
-        {
-            return BadRequest("Request body must be valid JSON.");
-        }
-
         if (request is null || string.IsNullOrWhiteSpace(request.Filename))
         {
             return BadRequest("Field 'filename' is required.");
@@ -65,33 +57,39 @@ public class SaveToBlob
             return BadRequest($"Field 'content' must be at most {MaxContentLength} characters.");
         }
 
-        var contentType = string.IsNullOrWhiteSpace(request.ContentType)
-            ? "text/plain"
-            : request.ContentType.Trim();
+        var mimeType = ToMimeType(contentType);
 
         var blobUri = $"{ContainerName}/{filename}";
 
-        _logger.LogInformation("Saving blob {BlobUri} ({ContentType}, {SizeBytes} bytes)", blobUri, contentType, request.Content.Length);
+        _logger.LogInformation("Saving blob {BlobUri} ({ContentType}, {SizeBytes} bytes)", blobUri, mimeType, request.Content.Length);
 
-        return new SaveToBlobOutput
+        return Task.FromResult(new SaveToBlobOutput
         {
             Filename = filename,
             BlobContent = request.Content,
             HttpResponse = new CreatedResult(
                 $"/api/save/{filename}",
-                new SaveBlobResponse(filename, blobUri, contentType, request.Content.Length))
-        };
+                new SaveBlobResponse(filename, blobUri, mimeType, request.Content.Length))
+        });
     }
+
+    private static string ToMimeType(BlobContentType contentType) => contentType switch
+    {
+        BlobContentType.ApplicationJson => "application/json",
+        BlobContentType.TextHtml => "text/html",
+        BlobContentType.TextCsv => "text/csv",
+        _ => "text/plain"
+    };
 
     private static bool IsSafeFilename(string filename) =>
         !filename.Contains('/') &&
         !filename.Contains('\\') &&
         !filename.Contains("..", StringComparison.Ordinal);
 
-    private static SaveToBlobOutput BadRequest(string error) => new()
+    private static Task<SaveToBlobOutput> BadRequest(string error) => Task.FromResult(new SaveToBlobOutput
     {
         HttpResponse = new BadRequestObjectResult(new { error })
-    };
+    });
 }
 
 public class SaveToBlobOutput

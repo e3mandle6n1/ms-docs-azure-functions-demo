@@ -22,19 +22,10 @@ public class EnqueueMessage
     }
 
     [Function("EnqueueMessage")]
-    public async Task<EnqueueMessageOutput> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "messages")] HttpRequest req)
+    public Task<EnqueueMessageOutput> Run(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "messages")] HttpRequest req,
+        [FromBody] EnqueueMessageRequest? request)
     {
-        EnqueueMessageRequest? request;
-        try
-        {
-            request = await JsonSerializer.DeserializeAsync<EnqueueMessageRequest>(req.Body, SerializerOptions);
-        }
-        catch (JsonException)
-        {
-            return BadRequest("Request body must be valid JSON.");
-        }
-
         if (request is null || string.IsNullOrWhiteSpace(request.Message))
         {
             return BadRequest("Field 'message' is required.");
@@ -50,17 +41,17 @@ public class EnqueueMessage
 
         _logger.LogInformation("Enqueued message {MessageId} to queue {QueueName}", payload.Id, QueueName);
 
-        return new EnqueueMessageOutput
+        return Task.FromResult(new EnqueueMessageOutput
         {
             QueueMessage = JsonSerializer.Serialize(payload, SerializerOptions),
             HttpResponse = new AcceptedResult((string?)null, new { queue = QueueName, payload })
-        };
+        });
     }
 
-    private static EnqueueMessageOutput BadRequest(string error) => new()
+    private static Task<EnqueueMessageOutput> BadRequest(string error) => Task.FromResult(new EnqueueMessageOutput
     {
         HttpResponse = new BadRequestObjectResult(new { error })
-    };
+    });
 }
 
 public class EnqueueMessageOutput

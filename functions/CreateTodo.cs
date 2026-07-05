@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -18,33 +17,42 @@ public class CreateTodo
     }
 
     [Function("CreateTodo")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "todos")] HttpRequest req)
+    public IActionResult Run(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "todos")] HttpRequest req,
+        [FromBody] IReadOnlyList<CreateTodoRequest>? todos)
     {
-        CreateTodoRequest? request;
-        try
+        if (todos is null || todos.Count == 0)
         {
-            request = await JsonSerializer.DeserializeAsync<CreateTodoRequest>(req.Body, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        }
-        catch (JsonException)
-        {
-            return new BadRequestObjectResult(new { error = "Request body must be valid JSON." });
+            return new BadRequestObjectResult(new { error = "Request body must be a non-empty JSON array of todos." });
         }
 
-        if (request is null || string.IsNullOrWhiteSpace(request.Title))
+        var created = new List<Todo>(todos.Count);
+
+        for (var i = 0; i < todos.Count; i++)
         {
-            return new BadRequestObjectResult(new { error = "Field 'title' is required." });
+            var item = todos[i];
+            if (string.IsNullOrWhiteSpace(item?.Title))
+            {
+                return new BadRequestObjectResult(new { error = $"Item at index {i} is missing required field 'title'." });
+            }
+
+            var title = item.Title.Trim();
+            if (title.Length > MaxTitleLength)
+            {
+                return new BadRequestObjectResult(new
+                {
+                    error = $"Item at index {i}: field 'title' must be at most {MaxTitleLength} characters."
+                });
+            }
+
+            created.Add(new Todo(Guid.NewGuid(), title, DateTimeOffset.UtcNow));
         }
 
-        var title = request.Title.Trim();
-        if (title.Length > MaxTitleLength)
+        foreach (var todo in created)
         {
-            return new BadRequestObjectResult(new { error = $"Field 'title' must be at most {MaxTitleLength} characters." });
+            _logger.LogInformation("Created todo {TodoId}: {Title}", todo.Id, todo.Title);
         }
 
-        var todo = new Todo(Guid.NewGuid(), title, DateTimeOffset.UtcNow);
-
-        _logger.LogInformation("Created todo {TodoId}: {Title}", todo.Id, todo.Title);
-
-        return new CreatedResult($"/api/todos/{todo.Id}", todo);
+        return new CreatedResult("/api/todos", new CreateTodosResponse(created));
     }
 }

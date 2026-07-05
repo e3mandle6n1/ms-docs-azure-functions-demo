@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace My.Function;
 
+[ApiExplorerSettings(IgnoreApi = true)]
 public class HttpExample
 {
     private readonly ILogger<HttpExample> _logger;
