@@ -251,6 +251,62 @@ To watch it locally without waiting for Monday 04:00 UTC, temporarily change the
 
 </details>
 
+<details>
+<summary><strong>GetWeather</strong> — <code>GET /api/weather/{city}</code></summary>
+
+Returns a weather report for the given city via [WeatherAPI.com](https://www.weatherapi.com/). Demonstrates constructor injection of a custom service: `IWeatherService` is registered in `Program.cs` and injected into the function alongside the logger.
+
+When `WeatherApi__ApiKey` is configured, `WeatherApiWeatherService` calls the real API. Without a key, the app falls back to `FakeWeatherService` (deterministic fake data).
+
+| Route param | Required | Description |
+|-------------|----------|-------------|
+| `city`      | Yes      | City name (part of the URL path). Use `Paris,FR` for disambiguation. |
+
+### Configuration
+
+**Local development** — paste your API key into `local.settings.json` (gitignored):
+
+```json
+"WeatherApi__ApiKey": "your-key-here"
+```
+
+**Azure** — set the same app setting on the Function App after deploy:
+
+```bash
+az functionapp config appsettings set \
+  --name <function-app-name> \
+  --resource-group <resource-group-name> \
+  --settings "WeatherApi__ApiKey=your-key-here"
+```
+
+Alternatively, use .NET user secrets (also gitignored):
+
+```bash
+dotnet user-secrets set "WeatherApi:ApiKey" "your-key-here"
+```
+
+### Examples
+
+```bash
+# Get the weather for a city (200 OK)
+curl -i "http://localhost:7137/api/weather/johannesburg" | jq .
+# {
+#  "city": "Johannesburg",
+#  "temperatureC": 9,
+#  "condition": "Severe smog",
+#  "observedAt": "2026-07-05T05:30:00+00:00",
+#  "temperatureF": 48
+# }
+
+# Disambiguate common city names
+curl -s "http://localhost:7137/api/weather/Paris,FR" | jq .
+
+# Unknown city (404)
+curl -i "http://localhost:7137/api/weather/NotARealCity12345"
+```
+
+</details>
+
 ### Deploy and test in Azure
 
 ```bash
@@ -360,6 +416,7 @@ ms-docs-azure-functions-demo/
 │   ├── CreateTodo.cs
 │   ├── EchoHeaders.cs
 │   ├── EnqueueMessage.cs
+│   ├── GetWeather.cs
 │   ├── Greetuser.cs
 │   ├── Heartbeat.cs
 │   ├── HttpExample.cs
@@ -368,7 +425,13 @@ ms-docs-azure-functions-demo/
 ├── models/
 │   ├── QueueMessage.cs
 │   ├── SaveBlob.cs
-│   └── Todo.cs
+│   ├── Todo.cs
+│   └── WeatherReport.cs
+├── services/
+│   ├── IWeatherService.cs
+│   ├── FakeWeatherService.cs
+│   ├── WeatherApiOptions.cs
+│   └── WeatherApiWeatherService.cs
 ├── Properties/
 │   └── launchSettings.json
 ├── infra/
