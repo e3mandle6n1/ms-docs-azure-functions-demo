@@ -4,6 +4,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using My.Function.Repositories;
 using My.Function.Services;
+using My.Function.Time;
 
 namespace My.Function;
 
@@ -16,10 +17,12 @@ public class CleanupOldBlobs
     private static readonly TimeSpan MaxAge = TimeSpan.FromDays(2);
 
     private readonly ILogger<CleanupOldBlobs> _logger;
+    private readonly AppTimeZone _appTimeZone;
 
-    public CleanupOldBlobs(ILogger<CleanupOldBlobs> logger)
+    public CleanupOldBlobs(ILogger<CleanupOldBlobs> logger, AppTimeZone appTimeZone)
     {
         _logger = logger;
+        _appTimeZone = appTimeZone;
     }
 
     [Function("CleanupOldBlobs")]
@@ -30,10 +33,11 @@ public class CleanupOldBlobs
         var cutoff = DateTimeOffset.UtcNow - MaxAge;
 
         _logger.LogInformation(
-            "CleanupOldBlobs started at {TimestampUtc:O} (container: {Container}, cutoff: {CutoffUtc:O}, isPastDue: {IsPastDue})",
-            DateTimeOffset.UtcNow,
+            "CleanupOldBlobs started at {Timestamp:O} ({TimeZone}, container: {Container}, cutoff: {Cutoff:O}, isPastDue: {IsPastDue})",
+            _appTimeZone.Now,
+            _appTimeZone.Id,
             BlobUploadService.ContainerName,
-            cutoff,
+            _appTimeZone.Convert(cutoff),
             timer.IsPastDue);
 
         if (!await container.ExistsAsync())
@@ -64,7 +68,10 @@ public class CleanupOldBlobs
             {
                 await container.DeleteBlobIfExistsAsync(blob.Name, DeleteSnapshotsOption.IncludeSnapshots);
                 deleted++;
-                _logger.LogInformation("Deleted blob {BlobName} (last modified {LastModifiedUtc:O})", blob.Name, lastModified);
+                _logger.LogInformation(
+                    "Deleted blob {BlobName} (last modified {LastModified:O})",
+                    blob.Name,
+                    _appTimeZone.Convert(lastModified.Value));
             }
             catch (Azure.RequestFailedException ex)
             {
@@ -81,7 +88,10 @@ public class CleanupOldBlobs
 
         if (timer.ScheduleStatus is not null)
         {
-            _logger.LogInformation("Next cleanup scheduled for {NextUtc:O}", timer.ScheduleStatus.Next);
+            _logger.LogInformation(
+                "Next cleanup scheduled for {Next:O} ({TimeZone})",
+                _appTimeZone.Convert(timer.ScheduleStatus.Next),
+                _appTimeZone.Id);
         }
     }
 }

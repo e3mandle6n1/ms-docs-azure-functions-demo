@@ -1,5 +1,6 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using My.Function.Time;
 
 namespace My.Function;
 
@@ -21,10 +22,12 @@ public class Heartbeat
     //private const string EveryDay = "0 0 0 * * *";
 
     private readonly ILogger<Heartbeat> _logger;
+    private readonly AppTimeZone _appTimeZone;
 
-    public Heartbeat(ILogger<Heartbeat> logger)
+    public Heartbeat(ILogger<Heartbeat> logger, AppTimeZone appTimeZone)
     {
         _logger = logger;
+        _appTimeZone = appTimeZone;
     }
 
     [Function("Heartbeat")]
@@ -33,14 +36,18 @@ public class Heartbeat
         var environment = Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT") ?? "unknown";
 
         _logger.LogInformation(
-            "Heartbeat at {TimestampUtc:O} (environment: {Environment}, isPastDue: {IsPastDue})",
-            DateTimeOffset.UtcNow,
+            "Heartbeat at {Timestamp:O} ({TimeZone}, environment: {Environment}, isPastDue: {IsPastDue})",
+            _appTimeZone.Now,
+            _appTimeZone.Id,
             environment,
             timer.IsPastDue);
 
         if (timer.ScheduleStatus is not null)
         {
-            _logger.LogInformation("Next heartbeat scheduled for {NextUtc:O}", timer.ScheduleStatus.Next);
+            _logger.LogInformation(
+                "Next heartbeat scheduled for {Next:O} ({TimeZone})",
+                _appTimeZone.Convert(timer.ScheduleStatus.Next),
+                _appTimeZone.Id);
         }
     }
 }

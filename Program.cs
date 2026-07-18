@@ -12,11 +12,14 @@ using My.Function.ModelBinding;
 using My.Function.Repositories;
 using My.Function.Services;
 using My.Function.Swagger;
+using My.Function.Time;
 using OpenTelemetry;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.ConfigureFunctionsWebApplication();
+
+builder.Services.AddSingleton<AppTimeZone>();
 
 builder.Services.Configure<WeatherApiOptions>(
     builder.Configuration.GetSection(WeatherApiOptions.SectionName));
